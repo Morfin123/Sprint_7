@@ -6,22 +6,16 @@ import random
 import string
 import json
 
+
 class TestCreateCourier:
     @allure.title('Проверка успешного создания курьера')
     @allure.description("Отправляем POST запрос на создание нового курье и проверяем ответ")
     def test_success_create_courier(self):
-        def generate_random_string(length):
-            letters = string.ascii_lowercase
-            random_string = ''.join(random.choice(letters) for i in range(length))
-            return random_string
-
-        # создаём список, чтобы метод мог его вернуть
-        login_pass = []
 
         # генерируем логин, пароль и имя курьера
-        login = generate_random_string(10)
-        password = generate_random_string(10)
-        first_name = generate_random_string(10)
+        login = data.generate_random_string(10)
+        password = data.generate_random_string(10)
+        first_name = data.generate_random_string(10)
 
         # собираем тело запроса
         payload = {
@@ -33,14 +27,9 @@ class TestCreateCourier:
         # отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response
         response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', data=payload)
 
-        # если регистрация прошла успешно (код ответа 201), добавляем в список логин и пароль курьера
-        if response.status_code == 201:
-            login_pass.append(login)
-            login_pass.append(password)
-            login_pass.append(first_name)
-
         # проверяем ответ
         assert response.status_code == 201 and response.text == '{"ok":true}'
+
 
 class TestLoginCourier:
     @allure.title('Проверка успешной авторизации курьера')
@@ -55,6 +44,7 @@ class TestLoginCourier:
                                  data=payload)
 
         assert response.status_code == 200 and 'id' in response.text
+
 
 class TestDeleteCourier:
     @allure.title('Проверка успешного удаления курьера')
@@ -76,6 +66,7 @@ class TestDeleteCourier:
                                    data=payload)
         assert response.status_code == 200 and response.text == '{"ok":true}'
 
+
 class TestCreateOrder:
     @allure.title('Проверка успешного создания заказа')
     @allure.description("Отправляем POST запрос для создания заказа и проверяем ответ")
@@ -86,6 +77,7 @@ class TestCreateOrder:
         response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/orders',
                                  data=json.dumps(payload))
         assert response.status_code == 201 and 'track' in response.text
+
 
 class TestGetOrderInfo:
     @allure.title('Проверка получения списка заказов')
