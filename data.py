@@ -1,6 +1,10 @@
+import json
+from datetime import date
+
 import requests
 import random
 import string
+
 
 # метод регистрации нового курьера возвращает список из логина и пароля
 # если регистрация не удалась, возвращает пустой список
@@ -37,3 +41,38 @@ def register_new_courier_and_return_login_password():
 
     # возвращаем список
     return login_pass
+
+def get_random_data_order(color):
+    def generate_random_string(length):
+        letters = "аБгрвЗСМолпЫ"
+        random_string = "".join(random.choice(letters) for i in range(length))
+        return random_string
+    def get_random_phone():
+        phone = f"+79{random.randint(100000000, 999999999)}"
+        return phone
+    def get_date_today():
+        date_now = f"{date.today()}"
+        return date_now
+
+    first_name = generate_random_string(10)
+    last_name = generate_random_string(10)
+    address = generate_random_string(10)
+    metro_station = random.randint(1, 237)
+    phone = get_random_phone()
+    rent_time = random.randint(1, 10)
+    delivery_date = get_date_today()
+    comment = generate_random_string(10)
+    testcolor = color
+
+    payload = {
+        "firstName": first_name,
+        "lastName": last_name,
+        "address": address,
+        "metroStation": metro_station,
+        "phone": phone,
+        "rentTime": rent_time,
+        "deliveryDate": delivery_date,
+        "comment": comment,
+        "color": testcolor
+    }
+    return payload
